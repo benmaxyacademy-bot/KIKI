@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Custom scrollbars and blockly wrapper overrides */
+.blocklySvg {
+  background-color: transparent !important;
+}
+
+.blocklyToolboxDiv {
+  background-color: #f8fafc !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
+/* Custom smooth animations */
+@keyframes bounce-gentle {
+  0%, 100% {
+    transform: translateY(-4%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 2.5s infinite ease-in-out;
+}
+

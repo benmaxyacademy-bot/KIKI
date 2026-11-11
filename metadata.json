@@ -1,0 +1,7 @@
+{
+  "name": "UlarPintar - Belajar Python Blockly Game Snake untuk SD",
+  "description": "LMS interaktif belajar pemrograman Python dengan balok visual Blockly untuk siswa SD. Buat game Snake, Pong, Batu Gunting Kertas, Flappy Bird, dan Space Shooter langkah demi langkah.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
