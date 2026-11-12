@@ -38,43 +38,69 @@ export function evaluateSnakeLevel(
     const posBlock = allBlocks.find((b) => b.type === 'snake_set_position');
     const hasPosition = Boolean(posBlock);
 
-    let isPosCorrect = false;
+    // Extract X and Y values from block inputs or Python code
+    let valX: number | null = null;
+    let valY: number | null = null;
+
     if (posBlock) {
-      // Check coordinates
-      const posX = posBlock.getInputTargetBlock('POS_X');
-      const posY = posBlock.getInputTargetBlock('POS_Y');
-      const numX = posX?.getFieldValue('NUM');
-      const numY = posY?.getFieldValue('NUM');
-      if (numX === '10' && numY === '10') {
-        isPosCorrect = true;
+      const targetX = posBlock.getInputTargetBlock('POS_X');
+      const targetY = posBlock.getInputTargetBlock('POS_Y');
+      if (targetX) {
+        const num = targetX.getFieldValue('NUM');
+        if (num !== null && num !== undefined && num !== '') {
+          valX = parseInt(num, 10);
+        }
+      }
+      if (targetY) {
+        const num = targetY.getFieldValue('NUM');
+        if (num !== null && num !== undefined && num !== '') {
+          valY = parseInt(num, 10);
+        }
       }
     }
 
+    // Fallback extraction from generated Python code:
+    const xMatch = pythonCode.match(/ular_x\s*=\s*(\d+)/);
+    const yMatch = pythonCode.match(/ular_y\s*=\s*(\d+)/);
+    if ((valX === null || isNaN(valX)) && xMatch) valX = parseInt(xMatch[1], 10);
+    if ((valY === null || isNaN(valY)) && yMatch) valY = parseInt(yMatch[1], 10);
+
+    const isConnected = hasPosition && valX !== null && valY !== null;
+    const isPosCorrect = valX === 10 && valY === 10;
     const hasPythonCode = pythonCode.includes('ular_x') && pythonCode.includes('lebar_papan');
 
     const criteria = [
-      { id: 'c1', label: 'Memasang balok Mulai Game Snake (Ukuran 20x20)', passed: hasInit, points: 30 },
-      { id: 'c2', label: 'Menentukan posisi awal ular di koordinat X dan Y', passed: hasPosition, points: 30 },
-      { id: 'c3', label: 'Koordinat ular tepat di tengah: X=10, Y=10', passed: isPosCorrect, points: 20 },
-      { id: 'c4', label: 'Sintaks kode Python terbentuk sempurna', passed: hasPythonCode, points: 20 },
+      { id: 'c1', label: 'Memasang balok Mulai Game Snake (Ukuran 20x20)', passed: hasInit, points: 25 },
+      { id: 'c2', label: 'Memasang balok posisi kepala ular', passed: isConnected, points: 25 },
+      {
+        id: 'c3',
+        label: `Koordinat kepala ular tepat di tengah: X=10, Y=10 (Saat ini: X=${valX ?? '?'}, Y=${valY ?? '?'})`,
+        passed: isPosCorrect,
+        points: 35,
+      },
+      { id: 'c4', label: 'Sintaks kode Python terbentuk sempurna', passed: hasPythonCode, points: 15 },
     ];
 
     const score = criteria.reduce((acc, c) => (c.passed ? acc + c.points : acc), 0);
-    const passed = score >= 70;
-    const stars = score >= 95 ? 3 : score >= 70 ? 2 : 1;
+    const passed = isPosCorrect && hasInit && isConnected;
+    const stars = score >= 95 ? 3 : score >= 75 ? 2 : 1;
 
-    let feedback = 'Luar biasa! Kamu berhasil menaruh kepala ular Kiki tepat di tengah papan 20x20!';
-    if (score < 70) {
-      if (!hasInit) feedback = 'Yuk pasang balok hijau "Mulai Game Snake" terlebih dahulu!';
-      else if (!hasPosition) feedback = 'Jangan lupa sambungkan balok "Taruh Kepala Ular di Koordinat X, Y"!';
-      else if (!isPosCorrect) feedback = 'Ubah angka posisi ular menjadi X = 10 dan Y = 10 agar tepat di tengah!';
+    let feedback = 'Luar biasa! Kamu berhasil menaruh kepala ular Kiki tepat di tengah papan 20x20 (X=10, Y=10)!';
+    if (!passed) {
+      if (!hasInit) {
+        feedback = 'Yuk pasang balok hijau "Mulai Game Snake" terlebih dahulu!';
+      } else if (!hasPosition) {
+        feedback = 'Jangan lupa sambungkan balok "Taruh Kepala Ular di: X, Y" di bawah balok Mulai Game!';
+      } else if (!isPosCorrect) {
+        feedback = `Kepala ular Kiki saat ini berada di petak (X=${valX ?? '?'}, Y=${valY ?? '?'}). Ubah angka kotak menjadi X = 10 dan Y = 10 agar tepat di tengah arena!`;
+      }
     }
 
     return {
       score,
       stars,
       passed,
-      message: passed ? 'Misi Berhasil Diselesaikan!' : 'Masih Ada yang Kurang, Yuk Lengkapi!',
+      message: passed ? 'Misi Berhasil Diselesaikan!' : 'Koordinat Belum Tepat di Tengah!',
       feedback,
       criteria,
     };

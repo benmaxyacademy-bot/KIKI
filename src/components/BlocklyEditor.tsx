@@ -94,8 +94,10 @@ export const BlocklyEditor: React.FC<BlocklyEditorProps> = ({
         if (posBlock) {
           const posXCode = pythonGenerator.valueToCode(posBlock, 'POS_X', 0) || '10';
           const posYCode = pythonGenerator.valueToCode(posBlock, 'POS_Y', 0) || '10';
-          startX = Number(posXCode) || 10;
-          startY = Number(posYCode) || 10;
+          const parsedX = parseInt(posXCode.trim(), 10);
+          const parsedY = parseInt(posYCode.trim(), 10);
+          if (!isNaN(parsedX)) startX = parsedX;
+          if (!isNaN(parsedY)) startY = parsedY;
         }
 
         let foodType: 'apple' | 'star' | 'strawberry' | 'pizza' | 'donut' = 'apple';

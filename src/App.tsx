@@ -7,7 +7,6 @@ import { SnakeCanvas } from './components/SnakeCanvas';
 import { PythonViewer } from './components/PythonViewer';
 import { KikiAssistant } from './components/KikiAssistant';
 import { QuizModal } from './components/QuizModal';
-import { CertificateModal } from './components/CertificateModal';
 import { CoordinatesGuideModal } from './components/CoordinatesGuideModal';
 import { BadgesView } from './components/BadgesView';
 import { GlossaryView } from './components/GlossaryView';
@@ -33,7 +32,6 @@ export default function App() {
 
   // Modals & Evaluation state
   const [showQuizModal, setShowQuizModal] = useState<boolean>(false);
-  const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
   const [showCoordinatesGuide, setShowCoordinatesGuide] = useState<boolean>(false);
   const [showLevelSuccessBanner, setShowLevelSuccessBanner] = useState<boolean>(false);
   const [evalResult, setEvalResult] = useState<EvaluationResult | null>(null);
@@ -190,7 +188,6 @@ export default function App() {
       <Navbar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
-        onOpenCertificate={() => setShowCertificateModal(true)}
         isMuted={isMuted}
         onToggleMute={handleToggleMute}
         completedCount={completedLevels.length}
@@ -367,6 +364,7 @@ export default function App() {
                   targetScore={
                     currentLevel.id === 5 ? 30 : currentLevel.id === 6 ? 50 : undefined
                   }
+                  currentLevelId={currentLevelId}
                   onLevelGoalReached={handleLevelCompleted}
                 />
 
@@ -396,7 +394,6 @@ export default function App() {
           <BadgesView
             completedLevels={completedLevels}
             levelStars={levelStars}
-            onOpenCertificate={() => setShowCertificateModal(true)}
           />
         )}
 
@@ -411,15 +408,6 @@ export default function App() {
         quiz={currentLevel.quiz}
         levelNumber={currentLevel.id}
         onSuccess={handleQuizSuccess}
-      />
-
-      <CertificateModal
-        isOpen={showCertificateModal}
-        onClose={() => setShowCertificateModal(false)}
-        studentName={studentName}
-        onUpdateName={handleUpdateStudentName}
-        completedLevelsCount={completedLevels.length}
-        totalLevelsCount={7}
       />
 
       <CoordinatesGuideModal

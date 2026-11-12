@@ -24,8 +24,8 @@ export const PythonViewer: React.FC<PythonViewerProps> = ({ code, studentName = 
     sound.playClick();
     // Wrap with full runnable standalone Python script (Turtle / Pygame friendly)
     const fullPythonScript = `"""
-Game Snake Python - Karya Siswa SD: ${studentName}
-Dibuat dengan platform UlarPintar (Blockly to Python)
+Game Python - Karya Siswa SD: ${studentName}
+Dibuat dengan platform Gaming with KIKI (Blockly to Python)
 """
 import time
 import random

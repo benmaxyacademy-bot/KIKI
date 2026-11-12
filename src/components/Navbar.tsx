@@ -5,7 +5,6 @@ import { sound } from '../audio/soundEffects';
 interface NavbarProps {
   activeTab: 'curriculum' | 'games' | 'sandbox' | 'badges' | 'glossary';
   onSelectTab: (tab: 'curriculum' | 'games' | 'sandbox' | 'badges' | 'glossary') => void;
-  onOpenCertificate: () => void;
   isMuted: boolean;
   onToggleMute: () => void;
   completedCount: number;
@@ -14,7 +13,6 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   onSelectTab,
-  onOpenCertificate,
   isMuted,
   onToggleMute,
   completedCount,
@@ -35,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               🎮
             </div>
             <span className="text-xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap">
-              Ular<span className="text-emerald-600">Pintar</span>
+              Gaming with <span className="text-emerald-600">KIKI</span>
             </span>
           </button>
         </div>
@@ -113,8 +111,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </nav>
 
-        {/* Zone 3: 1 primary action (with sound toggle helper) */}
+        {/* Zone 3: Audio helper and player status badge */}
         <div className="flex items-center gap-3 shrink-0">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200/80 rounded-xl text-xs font-bold text-emerald-800">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Misi Selesai: {completedCount} Level</span>
+          </div>
+
           <button
             onClick={onToggleMute}
             title={isMuted ? 'Nyalakan Suara' : 'Matikan Suara'}
@@ -122,17 +125,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Toggle Sound"
           >
             {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5 text-emerald-600" />}
-          </button>
-
-          <button
-            onClick={() => {
-              sound.playClick();
-              onOpenCertificate();
-            }}
-            className="flex items-center gap-2 px-4 py-2 text-xs md:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-xl shadow-sm hover:shadow transition-all whitespace-nowrap shrink-0"
-          >
-            <Award className="w-4 h-4 text-yellow-300" />
-            <span>Sertifikat Juara ({completedCount}/6)</span>
           </button>
         </div>
       </div>

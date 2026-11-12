@@ -18,6 +18,7 @@ interface SnakeCanvasProps {
   onLevelGoalReached?: () => void;
   targetScore?: number;
   targetSteps?: number;
+  currentLevelId?: number;
 }
 
 export const SnakeCanvas: React.FC<SnakeCanvasProps> = ({
@@ -35,6 +36,7 @@ export const SnakeCanvas: React.FC<SnakeCanvasProps> = ({
   onLevelGoalReached,
   targetScore,
   targetSteps,
+  currentLevelId,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const GRID_SIZE = 20;
@@ -51,7 +53,7 @@ export const SnakeCanvas: React.FC<SnakeCanvasProps> = ({
   const [isWon, setIsWon] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [steps, setSteps] = useState<number>(0);
-  const [showGridCoordinates, setShowGridCoordinates] = useState<boolean>(false);
+  const [showGridCoordinates, setShowGridCoordinates] = useState<boolean>(currentLevelId === 1);
   const [gameSpeed, setGameSpeed] = useState<number>(initialSpeed);
 
   // References to keep loop callbacks up-to-date
@@ -421,17 +423,39 @@ export const SnakeCanvas: React.FC<SnakeCanvasProps> = ({
   return (
     <div className="flex flex-col items-center bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
       {/* Top Status & Controls */}
-      <div className="w-full flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-        <div className="flex items-center gap-4 text-sm font-semibold">
+      <div className="w-full flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
+        <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm font-semibold">
           <div className="flex items-center gap-1.5 text-slate-700">
             <span className="text-base">🍎</span>
             <span>Skor:</span>
             <span className="font-mono text-emerald-700 font-bold text-base">{score}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-slate-700">
-            <span>📏 Panjang:</span>
-            <span className="font-mono text-slate-900 font-bold">{snake.length}</span>
+
+          {/* Real-time Head Coordinate Badge */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg font-mono text-xs font-bold shadow-2xs">
+            <span className="text-slate-500 font-sans font-medium text-[11px]">📍 Posisi Ular:</span>
+            <span
+              className={
+                snake[0]?.x === 10 && snake[0]?.y === 10
+                  ? 'text-emerald-700 font-black'
+                  : 'text-indigo-600 font-black'
+              }
+            >
+              X: {snake[0]?.x ?? 10}, Y: {snake[0]?.y ?? 10}
+            </span>
+            {currentLevelId === 1 && (
+              snake[0]?.x === 10 && snake[0]?.y === 10 ? (
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-sans font-extrabold ml-1">
+                  ✨ Tengah (10,10)
+                </span>
+              ) : (
+                <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-sans font-bold ml-1">
+                  Target: 10, 10
+                </span>
+              )
+            )}
           </div>
+
           {targetScore ? (
             <div className="text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md font-medium">
               Target: {targetScore} Poin
@@ -451,7 +475,7 @@ export const SnakeCanvas: React.FC<SnakeCanvasProps> = ({
               ? 'bg-emerald-100 text-emerald-800 font-semibold'
               : 'bg-slate-100 text-slate-600 hover:text-slate-900'
           }`}
-          title="Tampilkan angka koordinat X,Y pada kotak"
+          title="Tampilkan angka petak koordinat X,Y pada kotak"
         >
           <Grid3X3 className="w-3.5 h-3.5" />
           <span>Grid (X,Y)</span>
@@ -518,6 +542,16 @@ export const SnakeCanvas: React.FC<SnakeCanvasProps> = ({
           <button
             onClick={() => {
               sound.playClick();
+              if (currentLevelId === 1) {
+                if (snake[0]?.x === 10 && snake[0]?.y === 10) {
+                  setIsWon(true);
+                  sound.playLevelWin();
+                  onLevelGoalReached?.();
+                } else {
+                  sound.playTurn();
+                }
+                return;
+              }
               setIsRunning((r) => !r);
             }}
             className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl shadow-xs transition-transform active:scale-95 ${

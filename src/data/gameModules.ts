@@ -29,7 +29,7 @@ export interface GameCurriculum {
 export const GAME_CURRICULA: Record<GameType, GameCurriculum> = {
   snake: {
     gameId: 'snake',
-    gameTitle: 'Game Snake (Ular Pintar)',
+    gameTitle: 'Game Snake (Gaming with KIKI)',
     gameTagline: 'Merakit game Snake langkah demi langkah dari koordinat hingga game over!',
     totalStages: 6,
     stages: [], // Handled by main curriculum

@@ -8,12 +8,12 @@ export const CURRICULUM_LEVELS: LevelConfig[] = [
     subtitle: 'Konsep: Titik Koordinat (X & Y) dan Papan Game',
     conceptName: 'Koordinat X & Y',
     icon: '🎯',
-    story: 'Halo adik-adik! Kenalkan, aku Kiki si Ular Hijau! Hari ini kita akan belajar bahasa pemrograman Python. Langkah pertama membuat game Snake adalah menyiapkan papan kotak-kotak dan menaruh kepala ular tepat di tengah!',
-    mission: 'Atur ukuran papan game menjadi 20 x 20 petak, lalu tempatkan kepala Ular di koordinat X = 10 dan Y = 10.',
+    story: 'Halo adik-adik! Kenalkan, aku Kiki si Ular Hijau dari Gaming with KIKI! Sekarang Kiki masih berada di dekat pojok kiri (X=4, Y=4). Ayo ubah angka koordinat X dan Y menjadi 10 dan 10 agar kepala Kiki berpindah tepat ke tengah arena 20x20!',
+    mission: 'Ubah koordinat X = 10 dan Y = 10 pada balok posisi agar kepala Kiki meluncur tepat di tengah papan permainan!',
     requirements: [
-      'Gunakan balok "Mulai Game" dengan ukuran 20x20',
+      'Gunakan balok "Mulai Game Snake" ukuran 20x20',
       'Atur posisi kepala Ular di X = 10 dan Y = 10',
-      'Klik "Jalankan Game" untuk melihat kepala Kiki muncul!'
+      'Lihat posisi Kiki berpindah di layar, lalu klik "Kumpulkan & Periksa Kode"!'
     ],
     quiz: {
       id: 'q1',
@@ -25,7 +25,7 @@ export const CURRICULUM_LEVELS: LevelConfig[] = [
         { id: 'c', text: 'Di luar layar permainan', isCorrect: false }
       ]
     },
-    hint: 'Tarik balok "Mulai Game" ke area kerja, lalu pasang balok "Taruh Ular di Koordinat X, Y" di dalamnya!',
+    hint: 'Klik kotak angka pada balok "Taruh Kepala Ular di: X, Y", lalu ganti angkanya menjadi X = 10 dan Y = 10!',
     defaultXml: `<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="snake_init" x="40" y="40">
     <value name="WIDTH">
@@ -42,12 +42,12 @@ export const CURRICULUM_LEVELS: LevelConfig[] = [
       <block type="snake_set_position">
         <value name="POS_X">
           <shadow type="math_number">
-            <field name="NUM">10</field>
+            <field name="NUM">4</field>
           </shadow>
         </value>
         <value name="POS_Y">
           <shadow type="math_number">
-            <field name="NUM">10</field>
+            <field name="NUM">4</field>
           </shadow>
         </value>
       </block>

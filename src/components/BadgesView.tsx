@@ -6,13 +6,11 @@ import { sound } from '../audio/soundEffects';
 interface BadgesViewProps {
   completedLevels: number[];
   levelStars: Record<number, number>;
-  onOpenCertificate: () => void;
 }
 
 export const BadgesView: React.FC<BadgesViewProps> = ({
   completedLevels,
   levelStars,
-  onOpenCertificate,
 }) => {
   const completedCount = completedLevels.length;
   const totalStars = Object.values(levelStars).reduce((acc, s) => acc + s, 0);
@@ -127,31 +125,6 @@ export const BadgesView: React.FC<BadgesViewProps> = ({
             </div>
           );
         })}
-      </div>
-
-      {/* Certificate CTA */}
-      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Award className="w-8 h-8 text-amber-600 shrink-0" />
-          <div>
-            <h4 className="text-sm font-bold text-amber-950">
-              Klaim Sertifikat Kelulusan Resmi
-            </h4>
-            <p className="text-xs text-amber-800">
-              Selesaikan minimal 4 misi untuk membuka sertifikat digital dengan namamu!
-            </p>
-          </div>
-        </div>
-
-        <button
-          onClick={() => {
-            sound.playClick();
-            onOpenCertificate();
-          }}
-          className="px-5 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-xl shadow-xs transition-colors whitespace-nowrap"
-        >
-          Lihat Sertifikat
-        </button>
       </div>
     </div>
   );
